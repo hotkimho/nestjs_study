@@ -1,56 +1,19 @@
-import { Cat } from "./app.model";
+import { Cat, CatType } from "./cats.model";
+import { Router } from "express";
+import {
+  createCat,
+  deleteCat,
+  patchCat,
+  putCat,
+  readAllcat,
+  readCat,
+} from "./cats.service";
 
-app.get("/cats", (req: express.Request, res: express.Response) => {
-  try {
-    const cats = Cat;
-    res.status(200).send({
-      success: true,
-      data: {
-        cats,
-      },
-    });
-  } catch (error) {
-    res.status(400).send({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-app.get("/cats/:id", (req: express.Request, res: express.Response) => {
-  try {
-    const params = req.params;
-    console.log(params);
-    const cat = Cat.find((cat) => {
-      return cat.id === params.id;
-    });
-    res.status(200).send({
-      success: true,
-      data: {
-        cat,
-      },
-    });
-  } catch (error) {
-    res.status(400).send({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-app.post("/cats/", (req: express.Request, res: express.Response) => {
-  try {
-    const data = req.body;
-    console.log(data);
-    Cat.push(data);
-    res.status(200).send({
-      success: true,
-      data: { data },
-    });
-  } catch (error) {
-    res.status(400).send({
-      success: false,
-      error: error.message,
-    });
-  }
-});
+const router = Router();
+router.get("/cats", readAllcat);
+router.get("/cats/:id", readCat);
+router.post("/cats/", createCat);
+router.put("/cats/:id", putCat);
+router.patch("/cats/:id", patchCat);
+router.delete("/cats/:id", deleteCat);
+export default router;
