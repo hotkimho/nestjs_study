@@ -2,12 +2,28 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import {ValidationPipe} from "@nestjs/common";
+import {DocumentBuilder, OpenAPIObject, SwaggerModule} from "@nestjs/swagger";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(8000);
+
+
+  const config = new DocumentBuilder()
+    .setTitle('ho_nestjs')
+    .setDescription('dec')
+    .setVersion('1.0.0')
+    .build();
+  const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+  const PORT = process.env.PORT;
+  app.enableCors({
+    origin: true,
+    credentials: true
+  });
+  await app.listen(PORT);
 }
 
 bootstrap();

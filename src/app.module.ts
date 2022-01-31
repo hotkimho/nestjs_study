@@ -6,10 +6,12 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import * as mongoose from 'mongoose';
+import {AuthModule} from "./auth/auth.module";
 
 @Module({
   imports: [
     CatsModule,
+    AuthModule,
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODBURI, {
       useNewUrlParser: true,
